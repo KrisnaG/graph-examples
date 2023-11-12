@@ -1,0 +1,65 @@
+{
+  "nodes": [
+    {
+        "name": "Media",
+        "children": [
+            {
+                "name": "Social Media",
+                "children": []
+            },
+            {
+                "name": "News Media",
+                "children": []
+            }
+        ]
+    },
+    {
+        "name": "Public",
+        "children": [
+            {
+                "name": "People",
+                "children": []
+            }
+        ]
+    },
+    {
+        "name": "Gov",
+        "children": []
+    },
+    {
+        "name": "Emergency Response",
+        "children": []
+    },
+    {
+        "name": "Electricity Supply",
+        "children": [
+            {
+                "name": "Technicians",
+                "children": []
+            }
+        ]
+    }
+  ],
+  "links": [
+    {
+        "name": "",
+        "source": "Media",
+        "target": "People"
+    },
+    {
+        "name": "",
+        "source": "People",
+        "target": "Social Media"
+    },
+    {
+        "name": "",
+        "source": "People",
+        "target": "Gov"
+    },
+    {
+        "name": "",
+        "source": "Emergency Response",
+        "target": "Gov"
+    }
+  ]
+}
