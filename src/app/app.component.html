@@ -1,3 +1,16 @@
 <h1>Angular Graphs</h1>
 
-<app-force-graph></app-force-graph>
+<label for="graphSelector">Select Graph:</label>
+
+<select id="graphSelector" [(ngModel)]="selectedGraph">
+  <option value="1">Force Graph</option>
+  <option value="2">Pack With Arrows</option>
+</select>
+
+<div *ngIf="selectedGraph === '1'">
+  <app-force-graph [dataFileName]="selectedData"></app-force-graph>
+</div>
+
+<div *ngIf="selectedGraph === '2'">
+  <app-pack-with-arrow [dataFileName]="selectedData"></app-pack-with-arrow>
+</div>

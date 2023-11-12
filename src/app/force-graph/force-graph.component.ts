@@ -1,5 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, Input } from '@angular/core';
 
 import * as d3 from 'd3';
 import * as fg from 'force-graph';
@@ -8,12 +7,12 @@ import { createNodesAndLinksWithJunction } from '../utility';
 
 @Component({
   selector: 'app-force-graph',
-  standalone: true,
-  imports: [CommonModule],
   templateUrl: './force-graph.component.html',
   styleUrl: './force-graph.component.scss'
 })
 export class ForceGraphComponent implements AfterViewInit {
+  @Input() dataFileName: string = "";
+
   private graphData: any = {
     "nodes": [],
     "links": []
@@ -25,7 +24,7 @@ export class ForceGraphComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     const graph = fg.default();
 
-    d3.json('../../data/dummy.json').then((data: any) => {
+    d3.json(`../../data/${this.dataFileName}`).then((data: any) => {
       // Set our nodes and links for force graph
       this.graphData = createNodesAndLinksWithJunction(data);
 
@@ -40,12 +39,12 @@ export class ForceGraphComponent implements AfterViewInit {
         .nodeLabel((node: any) => `${node.id}:${node.group}`)
         .nodeAutoColorBy('group')
         .nodeRelSize(2)
-        .nodeVal('val')
+        .nodeVal((node: any) => node.name.startsWith('Junction') ? node.val / 2 : node.val)
         .cooldownTicks(100)
         // Add collision and bounding box forces
         .d3Force('collide', d3.forceCollide(20))
         .d3Force('box', () => {
-          const SQUARE_HALF_SIDE = graph.nodeRelSize() * 80 * 0.5;
+          const SQUARE_HALF_SIDE = graph.nodeRelSize() * 70 * 0.5;
   
           this.graphData.nodes.forEach((node: any) => {
             const x = node.x || 0, y = node.y || 0;

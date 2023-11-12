@@ -42,8 +42,39 @@ export function createNodesAndLinksWithJunction(data: any, nodeValue?: number): 
     }
 
     for (const node of data.nodes) {
-        createNodesAndLinks(node, node.name)
+        createNodesAndLinks(node, node.name);
     }
 
     return graphData;
+}
+
+
+export function createNodesAndLinksInHierarchy(data: any, nodeValue?: number): Object {
+  const NODE_VALUE = nodeValue ?? 10;
+  const graphData: any = {
+      "name": 'root',
+      "children": [],
+      "links": []
+  }
+
+  graphData.links = data.links;
+  graphData.children = data.nodes;
+
+  const updateNodes = (node: any, group: string) => {
+      node.group = group;
+      node.value = NODE_VALUE;
+  
+      if (node.children && node.children.length > 0) {  
+        // update all child nodes
+        for (const child of node.children) {
+          updateNodes(child, group);
+        }
+      }
+  }
+
+  for (const node of data.nodes) {
+      updateNodes(node, node.name);
+  }
+
+  return graphData;
 }
