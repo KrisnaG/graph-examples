@@ -11,5 +11,5 @@ import { ForceGraphComponent } from "./force-graph/force-graph.component";
     imports: [CommonModule, RouterOutlet, ForceGraphComponent]
 })
 export class AppComponent {
-  title = 'graphs';
+  title = 'graph-examples';
 }

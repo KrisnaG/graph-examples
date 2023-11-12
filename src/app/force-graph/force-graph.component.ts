@@ -1,13 +1,10 @@
-import {
-  AfterViewInit,
-  Component
-} from '@angular/core';
-import {
-  CommonModule
-} from '@angular/common';
+import { AfterViewInit, Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import * as d3 from 'd3';
 import * as fg from 'force-graph';
+
+import { createNodesAndLinksWithJunction } from '../utility';
 
 @Component({
   selector: 'app-force-graph',
@@ -21,7 +18,7 @@ export class ForceGraphComponent implements AfterViewInit {
     "nodes": [],
     "links": []
   }
-  private nodeValue = 10;
+
   private height = 800;
   private width = 1000;
 
@@ -29,13 +26,10 @@ export class ForceGraphComponent implements AfterViewInit {
     const graph = fg.default();
 
     d3.json('../../data/dummy.json').then((data: any) => {
-      // 
-      this.graphData.links = data.links;
-      for (const node of data.nodes) {
-        this.createNodesAndLinks(node, node.name)
-      }
+      // Set our nodes and links for force graph
+      this.graphData = createNodesAndLinksWithJunction(data);
 
-      // 
+      // Force Graph Component
       graph(document.getElementById('graph') !)
         .width(this.width)
         .height(this.height)  
@@ -68,39 +62,5 @@ export class ForceGraphComponent implements AfterViewInit {
       // fit to canvas when engine stops
       graph.onEngineStop(() => graph.zoomToFit(400));
     })
-  }
-
-  private createNodesAndLinks(node: any, group: string) {
-    this.graphData.nodes.push({
-      "id": node.name,
-      "name": node.name,
-      "group": group,
-      "val": this.nodeValue
-    });
-
-    if (node.children && node.children.length > 0) {
-      // create junction node between child and parent
-      this.graphData.nodes.push({
-        "id": `Junction:${node.name}`,
-        "name": `Junction:${node.name}`,
-        "group": group,
-        "val": this.nodeValue
-      });
-
-      // point junction to parent
-      this.graphData.links.push({
-        "source": `Junction:${node.name}`,
-        "target": node.name
-      });
-
-      // point all children to junction
-      for (const child of node.children) {
-        this.graphData.links.push({
-          "source": child.name,
-          "target": `Junction:${node.name}`
-        });
-        this.createNodesAndLinks(child, group);
-      }
-    }
   }
 }
