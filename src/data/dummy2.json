@@ -1,0 +1,74 @@
+{
+  "nodes": [
+    {
+      "name": "A",
+      "group": "Defender"
+    },
+    {
+      "name": "B",
+      "group": "Defender"
+    },
+    {
+      "name": "C",
+      "group": "Defender"
+    },
+    {
+      "name": "D",
+      "group": "Defender"
+    },
+    {
+      "name": "E",
+      "group": "Defender"
+    },
+    {
+      "name": "F",
+      "group": "Attacker"
+    },
+    {
+      "name": "G",
+      "group": "Attacker"
+    },
+    {
+      "name": "H",
+      "group": "Attacker"
+    },
+    {
+      "name": "I",
+      "group": "Attacker"
+    },
+    {
+      "name": "J",
+      "group": "Attacker"
+    },
+    {
+      "name": "K",
+      "group": "Attacker"
+    }
+  ],
+  "links": [
+    {
+      "name": "",
+      "source": "A",
+      "target": "B",
+      "timestep": 0
+    },
+    {
+      "name": "",
+      "source": "C",
+      "target": "B",
+      "timestep": 0
+    },
+    {
+      "name": "",
+      "source": "D",
+      "target": "C",
+      "timestep": 0
+    },
+    {
+      "name": "",
+      "source": "D",
+      "target": "E",
+      "timestep": 0
+    }
+  ]
+}
