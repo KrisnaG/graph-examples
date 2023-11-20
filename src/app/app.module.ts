@@ -6,12 +6,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { PackWithArrowComponent } from './pack-with-arrow/pack-with-arrow.component';
 import { AppComponent } from './app.component';
+import { TimestepGraphComponent } from './timestep-graph/timestep-graph.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         ForceGraphComponent,
-        PackWithArrowComponent
+        PackWithArrowComponent,
+        TimestepGraphComponent
     ],
     imports:[ 
         BrowserModule,

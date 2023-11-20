@@ -4,11 +4,13 @@
 <select id="graphSelector" [(ngModel)]="selectedGraph">
   <option value="1">Force Graph</option>
   <option value="2">Pack With Arrows</option>
+  <option value="3">Timestep Graph</option>
 </select>
 
 <label for="dataSelector">Select Data:</label>
 <select id="dataSelector" [(ngModel)]="selectedData">
   <option value="dummy.json">Dummy</option>
+  <option value="dummy2.json">Dummy</option>
 </select>
 
 <div *ngIf="selectedGraph === '1'">
@@ -17,4 +19,8 @@
 
 <div *ngIf="selectedGraph === '2'">
   <app-pack-with-arrow [dataFileName]="selectedData"></app-pack-with-arrow>
+</div>
+
+<div *ngIf="selectedGraph === '3'">
+  <app-timestep-graph [dataFileName]="selectedData"></app-timestep-graph>
 </div>

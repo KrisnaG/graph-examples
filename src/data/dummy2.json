@@ -1,10 +1,6 @@
 {
   "nodes": [
     {
-      "name": "A",
-      "group": "Defender"
-    },
-    {
       "name": "B",
       "group": "Defender"
     },
@@ -35,6 +31,10 @@
     {
       "name": "I",
       "group": "Attacker"
+    },
+    {
+      "name": "A",
+      "group": "Defender"
     },
     {
       "name": "J",
@@ -68,6 +68,12 @@
       "name": "",
       "source": "D",
       "target": "E",
+      "timestep": 0
+    },
+    {
+      "name": "",
+      "source": "C",
+      "target": "I",
       "timestep": 0
     }
   ]

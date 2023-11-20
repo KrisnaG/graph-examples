@@ -134,21 +134,24 @@ export function createInputOutputNodesAndLinks(data: any, nodeValue?: number): O
       id: node.name,
       val: NODE_VALUE,
       name: node.name,
-      group: node.group
+      group: node.group,
+      level: 1
     });
 
     graphData.nodes.push({
       id: `Input-${node.name}`,
       val: NODE_VALUE,
       name: `Input-${node.name}`,
-      group: node.group
+      group: node.group,
+      level: 2
     });
 
     graphData.nodes.push({
       id: `Output-${node.name}`,
       val: NODE_VALUE,
       name: `Output-${node.name}`,
-      group: node.group
+      group: node.group,
+      level: 3
     });
 
     graphData.links.push({

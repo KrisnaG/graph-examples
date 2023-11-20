@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   public title = 'App';
-  public selectedGraph: string = '2';
-  public selectedData: string = 'dummy.json';
+  public selectedGraph: string = '3';
+  public selectedData: string = 'dummy2.json';
 }
