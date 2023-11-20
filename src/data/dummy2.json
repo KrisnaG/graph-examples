@@ -43,6 +43,22 @@
     {
       "name": "K",
       "group": "Attacker"
+    },
+    {
+      "name": "Z",
+      "group": "Infrastructure"
+    },
+    {
+      "name": "W",
+      "group": "Infrastructure"
+    },
+    {
+      "name": "X",
+      "group": "Infrastructure"
+    },
+    {
+      "name": "Y",
+      "group": "Infrastructure"
     }
   ],
   "links": [

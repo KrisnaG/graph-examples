@@ -34,12 +34,12 @@ export class TimestepGraphComponent implements AfterViewInit {
   private HEIGHT = 800;
   private WIDTH = 1000;
   private FONT_SIZE = 12;
-  private JUNCTION_BOX_SIZE = 8;
-  private JUNCTION_COLOUR = '#3a3a3b';
+  private JUNCTION_BOX_SIZE = 12;
+  private JUNCTION_COLOUR = '#717171';
   private JUNCTION_NAME = 'Input'
   private BACKGROUND_COLOUR = '#101020';
   private BOUNDING_BOX_FILL = 'rgba(255, 255, 255, 0.1)';
-  private BOUNDING_BOX_PADDING = 7;
+  private BOUNDING_BOX_PADDING = 15;
   private LINK_COLOUR = 'rgba(255, 255, 255, 0.4)';
   private LINK_LABEL_COLOUR = 'rgba(255, 255, 255, 0.8)';
 
@@ -69,14 +69,20 @@ export class TimestepGraphComponent implements AfterViewInit {
         if (a.id < b.id) return -1;
         if (a.id > b.id) return 1;
 
-        return 0; // Names are the same within the group
+        return 0;
       });
+
+      const uniqueGroups = new Set < string > ();
 
       // Spacing between level 1 nodes
       let count = 0;
       this.graphData.nodes.forEach((node: any) => {
         node.x = 0;
         if (node.level === 1) {
+          if (!uniqueGroups.has(node.group)) {
+            count++;
+            uniqueGroups.add(node.group);
+          }
           node.y = count * 50;
           count++;
         }
@@ -111,11 +117,9 @@ export class TimestepGraphComponent implements AfterViewInit {
         .nodeCanvasObject((node: any, ctx: any, globalScale: any) =>
           this.createObjectNodes(node, ctx, globalScale)
         )
-
         .graphData(this.graphData);
 
       const columnWidth = 100;
-
 
       // Apply the force to fix nodes along the X-axis
       graph.d3Force('fixX', () => {
@@ -124,26 +128,13 @@ export class TimestepGraphComponent implements AfterViewInit {
         });
       });
 
-      // Apply the force to align Y-axis based on nodes from level 1
-      // graph.d3Force('alignY', () => {
-      //   this.graphData.nodes.forEach((node: any) => {
-      //     const level1Node = level1Nodes.find((n: any) => n.id === node.id.split('-')[1]);
-      //     if (level1Node) {
-      //       // Adjust Y position relative to level 1 nodes
-      //       node.y = level1Node.y;
-      //     }
-      //   });
-      // });
-
       graph
         .d3Force('link', null)
         .d3Force('charge', null)
-        .cooldownTicks(50)
         .d3Force('center', null)
-        .onEngineStop(() => graph.zoomToFit(200));
-
+        .cooldownTicks(50)
+        .onEngineStop(() => graph.zoomToFit(200, 30));
     });
-
 
   }
 
@@ -155,19 +146,28 @@ export class TimestepGraphComponent implements AfterViewInit {
     const nodesInSameGroup = this.graphData.nodes.filter(
       (n: any) => n.group === node.group
     );
-
-    if (nodesInSameGroup.length > 1 && !this.drawnGroups.has(`${node.group}`)) {
+    
+    if (node.group && nodesInSameGroup.length > 1 && !this.drawnGroups.has(`${node.group}`)) {
       const groupBoundingBox = this.calculateBoundingBox(nodesInSameGroup);
-      ctx.fillStyle = this.BOUNDING_BOX_FILL;
+      ctx.globalAlpha = 0.1;
+      ctx.fillStyle = node.color;
       ctx.fillRect(
         groupBoundingBox.x - node.val - this.BOUNDING_BOX_PADDING,
         groupBoundingBox.y - node.val - this.BOUNDING_BOX_PADDING,
         groupBoundingBox.width + (node.val + this.BOUNDING_BOX_PADDING) * 2,
         groupBoundingBox.height + (node.val + this.BOUNDING_BOX_PADDING) * 2
-      );
-      this.drawnGroups.add(node.group);
-    }
+        );
+      ctx.globalAlpha = 1;
 
+      ctx.font = `12px Sans-Serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillStyle = node.color;
+        // Set border properties
+      ctx.fillText(node.group, groupBoundingBox.x - node.val - 100, groupBoundingBox.y + (groupBoundingBox.height / 2));
+    }
+    
+    this.drawnGroups.add(node.group);
 
     const fontSize = this.FONT_SIZE / globalScale;
     const label = node.name.startsWith(this.JUNCTION_NAME) ? '' : node.id;
@@ -178,9 +178,18 @@ export class TimestepGraphComponent implements AfterViewInit {
       ctx.fillRect(
         node.x - this.JUNCTION_BOX_SIZE / 2,
         node.y - this.JUNCTION_BOX_SIZE / 2,
-        this.JUNCTION_BOX_SIZE,
+        this.JUNCTION_BOX_SIZE * 2,
         this.JUNCTION_BOX_SIZE
       );
+      ctx.strokeStyle = 'black'; // Border color
+      ctx.lineWidth = 1; // Border width
+
+      // Draw a border around the rectangle
+      ctx.strokeRect(        node.x - this.JUNCTION_BOX_SIZE / 2,
+      node.y - this.JUNCTION_BOX_SIZE / 2,
+      this.JUNCTION_BOX_SIZE * 2,
+      this.JUNCTION_BOX_SIZE
+        );
     } else {
       // Draw circle
       ctx.fillStyle = node.color;
@@ -197,7 +206,7 @@ export class TimestepGraphComponent implements AfterViewInit {
     ctx.fillText(label, node.x, node.y + node.val + 2);
 
     // This has to be cleared otherwise it will not redraw
-    if (this.drawnGroups.size == this.numberOfGroups) {
+    if (this.drawnGroups.size >= this.numberOfGroups - 1) {
       this.drawnGroups.clear();
     }
   }
